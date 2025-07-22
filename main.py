@@ -3,24 +3,30 @@ from dotenv import load_dotenv
 from google import genai
 import sys
 
-
 def main():
+
+    load_dotenv()
 
     args = sys.argv[1:]
 
     if not args:
         print("AI Code Assistant")
-        print('Usage: python main.py "your prompt here"')
+        print('\nUsage: uv run main.py "prompt here"')
+        print('Example: uv run main.py How to solve TSP in linear time?')
         sys.exit(1)
 
-    user_prompt = " ".join(args)
-        
-    load_dotenv()
     api_key = os.environ.get("GEMINI_API_KEY")
     client = genai.Client(api_key=api_key)
+    
+    user_prompt = " ".join(args)
+
+    messages = [
+        types.Content(role="user", parts=[types.Part(text=user_prompt)])
+    ]
+        
     response = client.models.generate_content(
         model="gemini-2.0-flash-001", 
-        contents=user_prompt
+        contents=messages
     )
     print(response.text)
     print("Prompt tokens:", response.usage_metadata.prompt_token_count)
