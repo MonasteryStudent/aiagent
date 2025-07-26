@@ -1,5 +1,5 @@
 import os
-from functions.config import MAX_FILE_SIZE
+from config import MAX_FILE_SIZE
 
 def get_file_content(working_directory, file_path):
     # if file_path is a relative path outside the working_directory, 
@@ -25,7 +25,7 @@ def get_file_content(working_directory, file_path):
         return f'Error reading file "{target_path}": {e}'
 
 def test():
-    files_content = get_file_content("calculator", "lorem.txt")
+    files_content = get_file_content("calculator", "/bin")
     print(files_content)
     
 if __name__ == "__main__":

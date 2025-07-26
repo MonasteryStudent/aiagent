@@ -1,7 +1,8 @@
 # tests.py
 
-#from functions.get_files_info import get_files_info
-from functions.get_file_content import get_file_content
+# from functions.get_files_info import get_files_info
+# from functions.get_file_content import get_file_content
+from functions.write_file import write_file
 
 def tests():
 
@@ -20,13 +21,22 @@ def tests():
     # print(result)
 
     # - get_file_content tests
-    file_paths = ["main.py", "pkg/calculator.py", "/bin/cat", "pkg/does_not_exist.py"]
+    # file_paths = ["main.py", "pkg/calculator.py", "/bin/cat", "pkg/does_not_exist.py"]
 
-    for file_path in file_paths:
-        file_content = get_file_content("calculator", file_path)
-        print(f"Result for '{file_path}':")
-        print(file_content)
+    # for file_path in file_paths:
+    #     file_content = get_file_content("calculator", file_path)
+    #     print(f"Result for '{file_path}':")
+    #     print(file_content)
 
+    # write_file tests
+
+    file_paths = ["lorem.txt", "pkg/morelorem.txt", "/tmp/temp.txt"]
+    content = iter(["wait, this isn't lorem ipsum", "lorem ipsum dolor sit amet", "this should not be allowed"])
+
+    for path in file_paths:
+        result = write_file("calculator", path, next(content))
+        print(f"Result for '{path}':")
+        print(result)
 
 
 if __name__ == "__main__":
