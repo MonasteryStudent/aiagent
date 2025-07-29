@@ -2,7 +2,8 @@
 
 # from functions.get_files_info import get_files_info
 # from functions.get_file_content import get_file_content
-from functions.write_file import write_file
+# from functions.write_file import write_file
+from functions.run_python import run_python_file
 
 def tests():
 
@@ -30,14 +31,25 @@ def tests():
 
     # write_file tests
 
-    file_paths = ["lorem.txt", "pkg/morelorem.txt", "/tmp/temp.txt"]
-    content = iter(["wait, this isn't lorem ipsum", "lorem ipsum dolor sit amet", "this should not be allowed"])
+    # file_paths = ["lorem.txt", "pkg/morelorem.txt", "/tmp/temp.txt"]
+    # content = iter(["wait, this isn't lorem ipsum", "lorem ipsum dolor sit amet", "this should not be allowed"])
 
-    for path in file_paths:
-        result = write_file("calculator", path, next(content))
-        print(f"Result for '{path}':")
+    # for path in file_paths:
+    #     result = write_file("calculator", path, next(content))
+    #     print(f"Result for '{path}':")
+    #     print(result)
+
+    content_lst = [
+        ("calculator", "main.py"), 
+        ("calculator", "main.py"),
+        ("calculator", "tests.py"),
+        ("calculator", "../main.py"),
+        ("calculator", "nonexistent.py")
+    ]
+    
+    for content in content_lst:
+        result = run_python_file(*content)
         print(result)
-
 
 if __name__ == "__main__":
     tests()

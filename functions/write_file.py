@@ -3,9 +3,9 @@ import os
 def write_file(working_directory, file_path, content):
     abs_path_wdir = os.path.abspath(working_directory)
     # If file_path is a relative path outside the working_directory, 
-    # os.path.join() returns file_path. If i input
-    # "/bin", join() detects that it is not on path but if i otherwise
-    # insert "bin" join() appends it with a slash.
+    # os.path.join() returns file_path. If i input "/bin", join() 
+    # detects that it is not on path but if i otherwise insert "bin" 
+    # join() appends it with a slash.
     target_path = os.path.abspath(os.path.join(working_directory, file_path))
     if not target_path.startswith(abs_path_wdir):
         return f'Error: Cannot write to "{target_path}" as it is outside the permitted working directory'
