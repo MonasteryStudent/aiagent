@@ -1,5 +1,6 @@
 import os
-from config import MAX_FILE_SIZE
+from google.genai import types
+from functions.config import MAX_FILE_SIZE
 
 def get_file_content(working_directory, file_path):
     # if file_path is a relative path outside the working_directory, 
@@ -23,6 +24,21 @@ def get_file_content(working_directory, file_path):
         return file_content_string
     except Exception as e:
         return f'Error reading file "{target_path}": {e}'
+
+schema_get_file_content = types.FunctionDeclaration(
+    name="get_file_content",
+    description=f"Reads and returns the first {MAX_FILE_SIZE} characters of the content from a specified file within the working directory",
+    parameters=types.Schema(
+        type=types.Type.OBJECT,
+        properties={
+            "file_path": types.Schema(
+                type=types.Type.STRING,
+                description="The path to the file whose content should be read, relative to the working directory.",
+            ),
+        },
+        required=["file_path"],
+    ),
+)
 
 def test():
     files_content = get_file_content("calculator", "/bin")
