@@ -17,19 +17,21 @@ def run_python_file(working_directory, file_path, args=[]):
         commands = ["python3", file_path, *args]
         completed_process = subprocess.run(commands, timeout=30, capture_output=True, cwd=abs_path_wdir)
         output = []
+       
         if completed_process.stdout:
             output.append(f"STDOUT:\n{completed_process.stdout}")
         if completed_process.stderr:
             output.append(f"STDERR:\n{completed_process.stderr}")
         if completed_process.returncode != 0:
             output.append(f"Process exited with code {completed_process.returncode}\n")
+    
         return "\n".join(output) if output else "No output produced."
     except Exception as e:
         return f"Error: executing Python file: {e}"
 
 schema_run_python_file = types.FunctionDeclaration(
     name="run_python_file",
-    description="Executes a Pathon file within the working directory and returns the output from the interpreter",
+    description="Executes a Pathon file within the working directory and returns the output from the interpreter. If no optional arguments are given, runs the file without.",
     parameters=types.Schema(
         type=types.Type.OBJECT,
         properties={
@@ -37,7 +39,7 @@ schema_run_python_file = types.FunctionDeclaration(
                 type=types.Type.STRING,
                 description="Path to the Python file to execute, relative to the working directory.",
             ),
-           "args": types.Schema(
+            "args": types.Schema(
                 type=types.Type.ARRAY,
                 items=types.Schema(
                     type=types.Type.STRING,
@@ -51,7 +53,8 @@ schema_run_python_file = types.FunctionDeclaration(
 
 
 def test():
-    print(run_python_file("calculator", "empty_file.py"))
+    result = run_python_file("calculator", "main.py")
+    print(result)
 
 if __name__ == "__main__":
     test()
