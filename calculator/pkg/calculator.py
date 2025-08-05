@@ -18,6 +18,7 @@ class Calculator:
     def evaluate(self, expression):
         if not expression or expression.isspace():
             return None
+
         tokens = expression.strip().split()
         return self._evaluate_infix(tokens)
 
