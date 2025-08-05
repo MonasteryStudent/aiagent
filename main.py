@@ -5,6 +5,7 @@ from google.genai import types
 import sys
 
 from prompts import system_prompt
+from functions.config import MAX_ITERATIONS
 from call_function import available_functions, call_function
 
 def main():
@@ -34,8 +35,16 @@ def main():
     messages = [
         types.Content(role="user", parts=[types.Part(text=user_prompt)])
     ]
+    for i in range(MAX_ITERATIONS):
+        try:
+            response = generate_content(client, messages, verbose)
+            if response:
+                print("Final response:")
+                print(response)
+                break
+        except Exception as e:
+            raise Exception(f"Error: {e}")
 
-    generate_content(client, messages, verbose)
         
 def generate_content(client, messages, verbose):
 
@@ -47,6 +56,10 @@ def generate_content(client, messages, verbose):
             system_instruction=system_prompt
         )
     )
+
+    for candidate in response.candidates:
+        messages.append(candidate.content)
+
     if verbose:
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
@@ -67,6 +80,18 @@ def generate_content(client, messages, verbose):
         if verbose:
             print(f"-> {function_call_result.parts[0].function_response.response}")
         function_responses.append(function_call_result.parts[0])
+        # here
+        messages.append(
+            types.Content(
+                role="tool",
+                parts=[
+                    types.Part.from_function_response(
+                        name=function_call_part.name,
+                        response={"result": function_call_result.parts[0]},
+                    )
+                ],
+            )
+        )
 
     if not function_responses:
         raise Exception("no function responses generated, exiting.")
